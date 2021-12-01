@@ -16,7 +16,13 @@ type Pf2Server struct {
 	*Settings
 }
 
-func (s *Pf2Server) Init(ininame string) error {
+func NewServer(iniName string) (*Pf2Server, error) {
+	s := Pf2Server{}
+	err := s.init(iniName)
+	return &s, err
+}
+
+func (s *Pf2Server) init(ininame string) error {
 	s.ServerContext = NewServerContext()
 	if err := s.LoadIni(ininame); err != nil {
 		return err

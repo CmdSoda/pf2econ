@@ -7,6 +7,9 @@ import (
 
 func main() {
 	log.Infoln("Pathfinder 2e Console Server")
-	s := server.Pf2Server{}
+	s, err := server.NewServer("pf2econs.ini")
+	if err != nil {
+		log.Panicln(err.Error())
+	}
 	s.Run()
 }
