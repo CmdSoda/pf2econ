@@ -22,9 +22,9 @@ func NewServer(iniName string) (*Pf2Server, error) {
 	return &s, err
 }
 
-func (s *Pf2Server) init(ininame string) error {
+func (s *Pf2Server) init(iniName string) error {
 	s.ServerContext = NewServerContext()
-	if err := s.LoadIni(ininame); err != nil {
+	if err := s.LoadIni(iniName); err != nil {
 		return err
 	}
 	s.Settings = NewSettings(s.Ini)
@@ -81,25 +81,25 @@ func (s *Pf2Server) handleRequest(conn net.Conn) {
 	conn.Close()
 }
 
-func (s *Pf2Server) LoadCharacter(filename string) (game.Character, error) {
+func (s *Pf2Server) LoadCharacter(filename string) (*game.Character, error) {
 	c := game.Character{}
 	dataPathFilename := s.DataPath + filename
 	file, err := os.Open(dataPathFilename)
 	if err != nil {
 		log.Errorf("%s not found\n", dataPathFilename)
-		return c, err
+		return &c, err
 	}
 	bytes, err := ioutil.ReadAll(file)
 	if err != nil {
 		log.Errorf("%s error while reading\n", dataPathFilename)
-		return c, err
+		return &c, err
 	}
-	err = json.Unmarshal(bytes, &s)
+	err = json.Unmarshal(bytes, &c)
 	if err != nil {
 		log.Errorf("%s error while unmarshaling\n", dataPathFilename)
-		return c, err
+		return &c, err
 	}
-	return c, nil
+	return &c, nil
 }
 
 func (s *Pf2Server) SaveCharacter(character *game.Character, filename string) error {
