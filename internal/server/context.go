@@ -3,7 +3,7 @@ package server
 import "gopkg.in/ini.v1"
 
 type ServerContext struct {
-	Configuration *ini.File
+	Ini *ini.File
 }
 
 func NewServerContext() *ServerContext {

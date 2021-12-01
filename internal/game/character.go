@@ -9,7 +9,13 @@ type AbilityScores struct {
 	Charisma     uint32
 }
 
-type Charakter struct {
-	Name string
-	AbilityScores
+type Character struct {
+	Name      string
+	Abilities AbilityScores
+}
+
+func NewCharacter() *Character {
+	c := Character{}
+	c.Abilities = AbilityScores{}
+	return &c
 }
