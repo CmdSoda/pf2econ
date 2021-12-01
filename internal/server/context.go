@@ -1,4 +1,4 @@
-package main
+package server
 
 import "gopkg.in/ini.v1"
 

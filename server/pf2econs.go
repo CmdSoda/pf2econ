@@ -1,13 +1,14 @@
 package main
 
 import (
+	"github.com/CmdSoda/pf2econ/internal/server"
 	log "github.com/sirupsen/logrus"
 )
 
 func main() {
-	s := Pf2Server{}
+	s := server.Pf2Server{}
 	log.Infoln("Pathfinder 2e Console Server")
-	s.ServerContext = NewServerContext()
+	s.ServerContext = server.NewServerContext()
 	s.LoadIni()
 	s.ListenAndAccept()
 }
