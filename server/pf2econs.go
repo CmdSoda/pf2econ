@@ -12,14 +12,17 @@ var cfg *ini.File
 
 func main() {
 	log.Infoln("Pathfinder 2e Console Server")
+	loadConfig()
+	listenAndAccept()
+}
+
+func loadConfig() {
 	var err error
 	cfg, err = ini.Load("pf2econs.ini")
 	if err != nil {
 		fmt.Printf("Fail to read file: %v", err)
 		os.Exit(1)
 	}
-
-	listenAndAccept()
 }
 
 //goland:noinspection GoUnhandledErrorResult
