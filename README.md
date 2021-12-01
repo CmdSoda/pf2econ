@@ -5,7 +5,7 @@ Features:
 * Charakter sheets
 * Server/Client architecture
 * console user interface
-* Multilanguage support through extensions
+* Multi-language support through extensions
 
 ## The console user interface
 Will be based on github.com/jroimartin/gocui.
