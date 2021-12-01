@@ -1,4 +1,4 @@
-package game
+package pf2e
 
 type AbilityScores struct {
 	Strength     uint32

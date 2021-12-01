@@ -1,9 +1,8 @@
-package server
+package pf2e
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/CmdSoda/pf2econ/internal/game"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/ini.v1"
 	"io/ioutil"
@@ -11,31 +10,30 @@ import (
 	"os"
 )
 
-type Pf2Server struct {
-	*ServerContext
-	*Settings
+type Server struct {
+	Ini *ini.File
+	*ServerSettings
 }
 
-func NewServer(iniName string) (*Pf2Server, error) {
-	s := Pf2Server{}
+func NewServer(iniName string) (*Server, error) {
+	s := Server{}
 	err := s.init(iniName)
 	return &s, err
 }
 
-func (s *Pf2Server) init(iniName string) error {
-	s.ServerContext = NewServerContext()
+func (s *Server) init(iniName string) error {
 	if err := s.LoadIni(iniName); err != nil {
 		return err
 	}
-	s.Settings = NewSettings(s.Ini)
+	s.ServerSettings = NewSettings(s.Ini)
 	return nil
 }
 
-func (s *Pf2Server) Run() {
+func (s *Server) Run() {
 	s.ListenAndAccept()
 }
 
-func (s *Pf2Server) LoadIni(iniName string) error {
+func (s *Server) LoadIni(iniName string) error {
 	var err error
 	s.Ini, err = ini.Load(iniName)
 	if err != nil {
@@ -46,8 +44,8 @@ func (s *Pf2Server) LoadIni(iniName string) error {
 }
 
 //goland:noinspection GoUnhandledErrorResult
-func (s *Pf2Server) ListenAndAccept() {
-	l, err := net.Listen("tcp", "localhost:"+s.ServerContext.Ini.Section("").Key("port").String())
+func (s *Server) ListenAndAccept() {
+	l, err := net.Listen("tcp", "localhost:"+s.Ini.Section("").Key("port").String())
 	if err != nil {
 		fmt.Println("Error listening:", err.Error())
 		os.Exit(1)
@@ -67,7 +65,7 @@ func (s *Pf2Server) ListenAndAccept() {
 }
 
 //goland:noinspection GoUnhandledErrorResult
-func (s *Pf2Server) handleRequest(conn net.Conn) {
+func (s *Server) handleRequest(conn net.Conn) {
 	// Make a buffer to hold incoming data.
 	buf := make([]byte, 1024)
 	// Read the incoming connection into the buffer.
@@ -81,8 +79,8 @@ func (s *Pf2Server) handleRequest(conn net.Conn) {
 	conn.Close()
 }
 
-func (s *Pf2Server) LoadCharacter(filename string) (*game.Character, error) {
-	c := game.Character{}
+func (s *Server) LoadCharacter(filename string) (*Character, error) {
+	c := Character{}
 	dataPathFilename := s.DataPath + filename
 	file, err := os.Open(dataPathFilename)
 	if err != nil {
@@ -102,7 +100,7 @@ func (s *Pf2Server) LoadCharacter(filename string) (*game.Character, error) {
 	return &c, nil
 }
 
-func (s *Pf2Server) SaveCharacter(character *game.Character, filename string) error {
+func (s *Server) SaveCharacter(character *Character, filename string) error {
 	file, err := json.MarshalIndent(character, "", " ")
 	if err != nil {
 		return err

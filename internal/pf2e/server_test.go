@@ -1,17 +1,16 @@
-package server
+package pf2e
 
 import (
 	"fmt"
-	"github.com/CmdSoda/pf2econ/internal/game"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func newTestChar() *game.Character {
-	c := game.NewCharacter()
+func newTestChar() *Character {
+	c := NewCharacter()
 	c.Name = "John"
 	c.Name = "John"
-	c.Abilities = game.AbilityScores{
+	c.Abilities = AbilityScores{
 		Strength:     1,
 		Dexterity:    2,
 		Constitution: 3,
@@ -22,22 +21,25 @@ func newTestChar() *game.Character {
 	return c
 }
 
+var testChar = "testchar.json"
+var testCharIni = "testing/test.ini"
+
 func TestPf2Server_SaveCharacter(t *testing.T) {
-	s, err := NewServer("testing/test.ini")
+	s, err := NewServer(testCharIni)
 	assert.Nil(t, err)
 	c := newTestChar()
-	err = s.SaveCharacter(c, "testchar.json")
+	err = s.SaveCharacter(c, testChar)
 	assert.Nil(t, err)
 	fmt.Println(c)
 }
 
 func TestPf2Server_LoadCharacter(t *testing.T) {
 	var err error
-	var s *Pf2Server
-	var c *game.Character
-	s, err = NewServer("testing/test.ini")
+	var s *Server
+	var c *Character
+	s, err = NewServer(testCharIni)
 	assert.Nil(t, err)
-	c, err = s.LoadCharacter("testchar.json")
+	c, err = s.LoadCharacter(testChar)
 	assert.Nil(t, err)
 	ts := newTestChar()
 	assert.Equal(t, c.Name, ts.Name)
