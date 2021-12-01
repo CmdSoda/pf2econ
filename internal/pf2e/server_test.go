@@ -21,6 +21,7 @@ func newTestChar() *Character {
 	return c
 }
 
+//goland:noinspection SpellCheckingInspection
 var testChar = "testchar.json"
 var testCharIni = "testing/test.ini"
 

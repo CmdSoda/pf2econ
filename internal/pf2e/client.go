@@ -7,8 +7,10 @@ import (
 )
 
 type Client struct {
+	Pages []*CharacterPage
 }
 
+//goland:noinspection GoUnusedParameter
 func NewClient(iniName string) (*Client, error) {
 	c := Client{}
 
@@ -33,13 +35,16 @@ func (c *Client) Run() {
 	}
 }
 
-var reset = "\u001b[0m"
-var white = "\u001b[37;1m"
-var yellow = "\u001b[33;1m"
+//goland:noinspection GoUnusedConst
+const (
+	reset  = "\u001b[0m"
+	white  = "\u001b[37;1m"
+	yellow = "\u001b[33;1m"
+)
 
-func layout(g *gocui.Gui) error {
-	//maxX, maxY := g.Size()
-	if v, err := g.SetView("hello", 0, 0, 40, 20); err != nil {
+//goland:noinspection GoUnhandledErrorResult
+func createAbilityScoreView(g *gocui.Gui) error {
+	if v, err := g.SetView("AbilityScores", 0, 0, 40, 20); err != nil {
 		v.Title = "Ability Scores"
 		if err != gocui.ErrUnknownView {
 			return err
@@ -54,6 +59,12 @@ func layout(g *gocui.Gui) error {
 	return nil
 }
 
+func layout(g *gocui.Gui) error {
+	err := createAbilityScoreView(g)
+	return err
+}
+
+//goland:noinspection GoUnusedParameter
 func quit(g *gocui.Gui, v *gocui.View) error {
 	return gocui.ErrQuit
 }
